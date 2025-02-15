@@ -1,0 +1,39 @@
+{% extends 'backoffice.html.twig' %}
+
+{% block title %}Categorie Details{% endblock %}
+
+{% block recent_orders %}{% endblock %}
+{% block todos %}{% endblock %}
+
+{% block content %}
+    <div class="table-data">
+        <div class="order">
+            <div class="head">
+                <h3>Categorie Details</h3>
+            </div>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ categorie.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Nom</th>
+                        <td>{{ categorie.nom }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ categorie.description }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="actions mt-4">
+                <a href="{{ path('app_categorie_index') }}" class="btn btn-secondary btn-rounded btn-lg">Back to list</a>
+                <a href="{{ path('app_categorie_edit', {'id': categorie.id}) }}" class="btn btn-primary btn-rounded btn-lg">Edit</a>
+                <div class="delete-btn">
+                    {{ include('categorie/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

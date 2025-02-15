@@ -1,0 +1,55 @@
+{% extends 'backoffice.html.twig' %}
+
+{% block title %}Stage Details{% endblock %}
+
+{% block recent_orders %}{% endblock %}
+{% block todos %}{% endblock %}
+
+{% block content %}
+    <div class="table-data">
+        <div class="order">
+            <div class="head">
+                <h3>Stage Details</h3>
+            </div>
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <th>Id</th>
+                        <td>{{ stage.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Titre</th>
+                        <td>{{ stage.titre }}</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>{{ stage.description }}</td>
+                    </tr>
+                    <tr>
+                        <th>Entreprise</th>
+                        <td>{{ stage.entreprise }}</td>
+                    </tr>
+                    <tr>
+                        <th>Lieu</th>
+                        <td>{{ stage.lieu }}</td>
+                    </tr>
+                    <tr>
+                        <th>Duree</th>
+                        <td>{{ stage.duree }}</td>
+                    </tr>
+                    <tr>
+                        <th>Date Debut</th>
+                        <td>{{ stage.dateDebut ? stage.dateDebut|date('Y-m-d') : '' }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="actions mt-4">
+                <a href="{{ path('app_stage_index') }}" class="btn btn-secondary btn-rounded btn-lg">Back to list</a>
+                <a href="{{ path('app_stage_edit', {'id': stage.id}) }}" class="btn btn-primary btn-rounded btn-lg">Edit</a>
+                <div class="delete-btn">
+                    {{ include('stage/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

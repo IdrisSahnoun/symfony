@@ -1,0 +1,88 @@
+{% extends 'backoffice.html.twig' %}
+
+{% block title %}Stage Index{% endblock %}
+
+{% block page_title %}Stage Index{% endblock %}
+
+{% block breadcrumb %}
+    <li>
+        <a href="{{ path('app_stage_index') }}">Stages</a>
+    </li>
+    <li><i class='bx bx-chevron-right'></i></li>
+    <li>
+        <a class="active" href="#">Index</a>
+    </li>
+{% endblock %}
+
+{% block recent_orders %}{% endblock %}
+{% block todos %}{% endblock %}
+
+{% block content %}
+    <div class="head-title">
+        <div class="left">
+            <h1>Stage Index</h1>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="{{ path('app_stage_index') }}">Stages</a>
+                </li>
+                <li><i class='bx bx-chevron-right'></i></li>
+                <li>
+                    <a class="active" href="#">Index</a>
+                </li>
+            </ul>
+        </div>
+        <a href="{{ path('app_stage_new') }}" class="btn-download">
+            <i class='bx bx-plus'></i>
+            <span class="text">Create New</span>
+        </a>
+    </div>
+
+    <div class="table-data">
+        <div class="order">
+            <div class="head">
+                <h3>Stage List</h3>
+                <i class='bx bx-search'></i>
+                <i class='bx bx-filter'></i>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Titre</th>
+                        <th>Description</th>
+                        <th>Entreprise</th>
+                        <th>Lieu</th>
+                        <th>Duree</th>
+                        <th>DateDebut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for stage in stages %}
+                    <tr>
+                        <td>{{ stage.id }}</td>
+                        <td>{{ stage.titre }}</td>
+                        <td>{{ stage.description }}</td>
+                        <td>{{ stage.entreprise }}</td>
+                        <td>{{ stage.lieu }}</td>
+                        <td>{{ stage.duree }}</td>
+                        <td>{{ stage.dateDebut ? stage.dateDebut|date('Y-m-d') : '' }}</td>
+                        <td>
+                            <a href="{{ path('app_stage_show', {'id': stage.id}) }}" class="btn-action">
+                                <i class='bx bx-show'></i>
+                            </a>
+                            <a href="{{ path('app_stage_edit', {'id': stage.id}) }}" class="btn-action">
+                                <i class='bx bx-edit'></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="8" class="text-center">No records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

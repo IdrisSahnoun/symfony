@@ -1,0 +1,86 @@
+{% extends 'backoffice.html.twig' %}
+
+{% block title %}Edit Stage{% endblock %}
+
+{% block recent_orders %}{% endblock %}
+{% block todos %}{% endblock %}
+
+{% block content %}
+    <div class="head-title">
+        <div class="left">
+            <h1>Edit Stage</h1>
+            <ul class="breadcrumb">
+                <li>
+                    <a href="{{ path('app_stage_index') }}">Stages</a>
+                </li>
+                <li><i class='bx bx-chevron-right'></i></li>
+                <li>
+                    <a class="active" href="#">Edit</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="table-data">
+        <div class="order">
+            <div class="head">
+                <h3>Edit Stage</h3>
+            </div>
+            {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+                <div class="form-group row mb-3">
+                    {{ form_label(form.titre, null, {'label_attr': {'class': 'col-sm-2 col-form-label'}}) }}
+                    <div class="col-sm-10">
+                        {{ form_widget(form.titre, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                    {{ form_label(form.description, null, {'label_attr': {'class': 'col-sm-2 col-form-label'}}) }}
+                    <div class="col-sm-10">
+                        {{ form_widget(form.description, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                    {{ form_label(form.entreprise, null, {'label_attr': {'class': 'col-sm-2 col-form-label'}}) }}
+                    <div class="col-sm-10">
+                        {{ form_widget(form.entreprise, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                    {{ form_label(form.lieu, null, {'label_attr': {'class': 'col-sm-2 col-form-label'}}) }}
+                    <div class="col-sm-10">
+                        {{ form_widget(form.lieu, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                    {{ form_label(form.duree, null, {'label_attr': {'class': 'col-sm-2 col-form-label'}}) }}
+                    <div class="col-sm-10">
+                        {{ form_widget(form.duree, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                    {{ form_label(form.dateDebut, null, {'label_attr': {'class': 'col-sm-2 col-form-label'}}) }}
+                    <div class="col-sm-10">
+                        {{ form_widget(form.dateDebut, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                    {{ form_label(form.categorie, null, {'label_attr': {'class': 'col-sm-2 col-form-label'}}) }}
+                    <div class="col-sm-10">
+                        {{ form_widget(form.categorie, {'attr': {'class': 'form-control'}}) }}
+                    </div>
+                </div>
+                <div class="form-group row mb-3">
+                    <div class="col-sm-10 offset-sm-2">
+                    <br>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                        <a href="{{ path('app_stage_index') }}" class="btn btn-secondary">Back to list</a>
+                    </div>
+                </div>
+            {{ form_end(form) }}
+
+            <div class="delete-form mt-4" style="color:">
+                {{ include('stage/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
