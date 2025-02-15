@@ -234,7 +234,44 @@
                 {% endblock %}
             </div>
 
-            {% block content %}{% endblock %}
+            <!-- Stages and Resumes Block -->
+            {% block content %}
+            <div class="stages">
+                <div class="head">
+                    <h3>Stages and Resumes</h3>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stage Title</th>
+                            <th>Description</th>
+                            <th>Resumes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for stage in stages %}
+                            <tr>
+                                <td>{{ stage.titre }}</td>
+                                <td>{{ stage.description }}</td>
+                                <td>
+                                    <ul>
+                                        {% for resume in stage.resumes %}
+                                            <li><a href="{{ asset('uploads/resumes/' ~ resume.filename) }}" target="_blank">{{ resume.filename }}</a></li>
+                                        {% else %}
+                                            <li>No resumes available.</li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="3">No stages available.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endblock %}
         </main>
         <!-- MAIN -->
     </section>

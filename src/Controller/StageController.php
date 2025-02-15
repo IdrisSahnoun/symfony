@@ -3,17 +3,71 @@
 namespace App\Controller;
 
 use App\Entity\Stage;
+use App\Entity\Resume;
 use App\Form\StageType;
+use App\Form\ResumeType;
 use App\Repository\StageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/stage')]
 class StageController extends AbstractController
 {
+    #[Route('/list', name: 'stages_list', methods: ['GET'])]
+    public function stagesList(StageRepository $stageRepository): Response
+    {
+        $stages = $stageRepository->findAll();
+
+        return $this->render('home/home.html.twig', [
+            'stages' => $stages,
+        ]);
+    }
+
+    #[Route('/details/{id}', name: 'stage_details', methods: ['GET', 'POST'])]
+    public function stageDetails(Stage $stage, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $form = $this->createForm(ResumeType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Handle the resume upload
+            $resume = $form->get('resume')->getData();
+            if ($resume) {
+                $originalFilename = pathinfo($resume->getClientOriginalName(), PATHINFO_FILENAME);
+                $newFilename = uniqid().'.'.$resume->guessExtension();
+
+                // Move the file to the directory where resumes are stored
+                try {
+                    $resume->move(
+                        $this->getParameter('resumes_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // Handle exception if something happens during file upload
+                }
+
+                // Save the resume file and associate it with the stage
+                $resumeEntity = new Resume();
+                $resumeEntity->setFilename($newFilename);
+                $resumeEntity->setStage($stage);
+                $entityManager->persist($resumeEntity);
+                $entityManager->flush();
+            }
+
+            $this->addFlash('success', 'Resume uploaded successfully!');
+            return $this->redirectToRoute('stage_details', ['id' => $stage->getId()]);
+        }
+
+        return $this->render('home/stage_details.html.twig', [
+            'stage' => $stage,
+            'resumeForm' => $form->createView(),
+        ]);
+    }
+
     #[Route('/', name: 'app_stage_index', methods: ['GET'])]
     public function index(StageRepository $stageRepository): Response
     {
@@ -77,5 +131,15 @@ class StageController extends AbstractController
         }
 
         return $this->redirectToRoute('app_stage_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/backoffice', name: 'backoffice', methods: ['GET'])]
+    public function backoffice(StageRepository $stageRepository): Response
+    {
+        $stages = $stageRepository->findAll();
+
+        return $this->render('backoffice/backoffice.html.twig', [
+            'stages' => $stages,
+        ]);
     }
 }

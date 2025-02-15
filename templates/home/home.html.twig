@@ -1,0 +1,27 @@
+{% extends 'base1.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    <section id="stages" class="stages section">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Stages</h2>
+                <p>Available Stages</p>
+            </div>
+            <div class="row">
+                {% for stage in stages %}
+                    <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="fade-up" data-aos-delay="{{ loop.index * 100 }}">
+                        <div class="stage-item">
+                            <h3>{{ stage.titre }}</h3>
+                            <p>{{ stage.description }}</p>
+                            <a href="{{ path('stage_details', {'id': stage.id}) }}" class="btn btn-primary">Details</a>
+                        </div>
+                    </div>
+                {% else %}
+                    <p>No stages available.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

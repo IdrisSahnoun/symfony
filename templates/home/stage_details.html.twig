@@ -1,0 +1,50 @@
+{% extends 'base1.html.twig' %}
+
+{% block title %}Stage Details{% endblock %}
+
+{% block body %}
+    <section id="stage-details" class="stage-details section">
+        <div class="container">
+            <div class="section-title" data-aos="fade-up">
+                <h2>Stage Details</h2>
+                <p>{{ stage.titre }}</p>
+            </div>
+            <div class="row">
+                <div class="col-lg-8">
+                    <h3>Description</h3>
+                    <p>{{ stage.description }}</p>
+                    <h3>Entreprise</h3>
+                    <p>{{ stage.entreprise }}</p>
+                    <h3>Lieu</h3>
+                    <p>{{ stage.lieu }}</p>
+                    <h3>Duree</h3>
+                    <p>{{ stage.duree }}</p>
+                    <h3>Date Debut</h3>
+                    <p>{{ stage.dateDebut ? stage.dateDebut|date('Y-m-d') : '' }}</p>
+                </div>
+                <div class="col-lg-4">
+                    <h3>Upload Resume</h3>
+                    {{ form_start(resumeForm) }}
+                        <div class="form-group">
+                            {{ form_label(resumeForm.resume) }}
+                            {{ form_widget(resumeForm.resume, {'attr': {'class': 'form-control'}}) }}
+                            {{ form_errors(resumeForm.resume) }}
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-3">Upload</button>
+                    {{ form_end(resumeForm) }}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+        <script>
+            setTimeout(function() {
+                window.location.href = "{{ path('home') }}";
+            }, 3000); // Redirect after 3 seconds
+        </script>
+    {% endfor %}
+{% endblock %}

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -47,7 +49,16 @@ class Stage
     #[Assert\NotBlank(message: "La catégorie ne doit pas être vide.")]
     private ?Categorie $categorie = null;
 
+    #[ORM\OneToMany(targetEntity: Resume::class, mappedBy: 'stage', cascade: ['persist', 'remove'])]
+    private Collection $resumes;
+
+    public function __construct()
+    {
+        $this->resumes = new ArrayCollection();
+    }
+
     // Getters and setters for each property
+
     public function getId(): ?int
     {
         return $this->id;
@@ -133,6 +144,36 @@ class Stage
     public function setCategorie(?Categorie $categorie): self
     {
         $this->categorie = $categorie;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Resume[]
+     */
+    public function getResumes(): Collection
+    {
+        return $this->resumes;
+    }
+
+    public function addResume(Resume $resume): self
+    {
+        if (!$this->resumes->contains($resume)) {
+            $this->resumes[] = $resume;
+            $resume->setStage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResume(Resume $resume): self
+    {
+        if ($this->resumes->removeElement($resume)) {
+            // set the owning side to null (unless already changed)
+            if ($resume->getStage() === $this) {
+                $resume->setStage(null);
+            }
+        }
 
         return $this;
     }

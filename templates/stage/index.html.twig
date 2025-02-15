@@ -54,6 +54,7 @@
                         <th>Lieu</th>
                         <th>Duree</th>
                         <th>DateDebut</th>
+                        <th>Resumes</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -68,6 +69,15 @@
                         <td>{{ stage.duree }}</td>
                         <td>{{ stage.dateDebut ? stage.dateDebut|date('Y-m-d') : '' }}</td>
                         <td>
+                            <ul>
+                                {% for resume in stage.resumes %}
+                                    <li><a href="{{ asset('uploads/resumes/' ~ resume.filename) }}" target="_blank">{{ resume.filename }}</a></li>
+                                {% else %}
+                                    <li>No resumes available.</li>
+                                {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
                             <a href="{{ path('app_stage_show', {'id': stage.id}) }}" class="btn-action">
                                 <i class='bx bx-show'></i>
                             </a>
@@ -78,7 +88,7 @@
                     </tr>
                 {% else %}
                     <tr>
-                        <td colspan="8" class="text-center">No records found</td>
+                        <td colspan="9" class="text-center">No records found</td>
                     </tr>
                 {% endfor %}
                 </tbody>
