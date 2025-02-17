@@ -1,0 +1,21 @@
+{% extends 'base1.html.twig' %}
+
+{% block title %}Messages in Conversation{% endblock %}
+
+{% block body %}
+    <h1>Messages in Conversation</h1>
+
+    <ul>
+        {% for message in messages %}
+            <li>
+                <strong>Sender ID:</strong> {{ message.senderId }}<br>
+                <strong>Recipient ID:</strong> {{ message.recipientId }}<br>
+                <strong>Content:</strong> {{ message.content }}
+            </li>
+        {% else %}
+            <li>No messages found in this conversation.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{{ path('app_conversation_index') }}">Back to conversations</a>
+{% endblock %}

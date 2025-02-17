@@ -22,15 +22,9 @@ class Message
     )]
     private ?string $content = null;
 
-    #[ORM\Column]
-    #[Assert\NotNull(message: "Sender ID should not be null.")]
-    #[Assert\Positive(message: "Sender ID should be a positive integer.")]
-    private ?int $sender_id = null;
-
-    #[ORM\Column]
-    #[Assert\NotNull(message: "Recipient ID should not be null.")]
-    #[Assert\Positive(message: "Recipient ID should be a positive integer.")]
-    private ?int $recipient_id = null;
+    #[ORM\ManyToOne(targetEntity: Conversation::class, inversedBy: "messages")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Conversation $conversation = null;
 
     public function getId(): ?int
     {
@@ -49,26 +43,14 @@ class Message
         return $this;
     }
 
-    public function getSenderId(): ?int
+    public function getConversation(): ?Conversation
     {
-        return $this->sender_id;
+        return $this->conversation;
     }
 
-    public function setSenderId(int $sender_id): static
+    public function setConversation(?Conversation $conversation): static
     {
-        $this->sender_id = $sender_id;
-
-        return $this;
-    }
-
-    public function getRecipientId(): ?int
-    {
-        return $this->recipient_id;
-    }
-
-    public function setRecipientId(int $recipient_id): static
-    {
-        $this->recipient_id = $recipient_id;
+        $this->conversation = $conversation;
 
         return $this;
     }

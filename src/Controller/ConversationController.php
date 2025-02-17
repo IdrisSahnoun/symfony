@@ -19,6 +19,7 @@ class ConversationController extends AbstractController
     {
         return $this->render('conversation/index.html.twig', [
             'conversations' => $conversationRepository->findAll(),
+            'home_active' => true,
         ]);
     }
 
@@ -26,10 +27,8 @@ class ConversationController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $conversation = new Conversation();
-        // La date de début est déjà définie à la date du système dans le constructeur de l'entité
         $conversation->setProductId(1);
-        $conversation->setMessageId(1);
-        $conversation->setParticipant(1);
+        $conversation->setParticipant('Participant Name');
 
         $form = $this->createForm(ConversationType::class, $conversation);
         $form->handleRequest($request);
@@ -44,6 +43,7 @@ class ConversationController extends AbstractController
         return $this->renderForm('conversation/new.html.twig', [
             'conversation' => $conversation,
             'form' => $form,
+            'home_active' => true,
         ]);
     }
 
@@ -52,6 +52,7 @@ class ConversationController extends AbstractController
     {
         return $this->render('conversation/show.html.twig', [
             'conversation' => $conversation,
+            'home_active' => true,
         ]);
     }
 
@@ -70,6 +71,7 @@ class ConversationController extends AbstractController
         return $this->renderForm('conversation/edit.html.twig', [
             'conversation' => $conversation,
             'form' => $form,
+            'home_active' => true,
         ]);
     }
 
@@ -82,5 +84,15 @@ class ConversationController extends AbstractController
         }
 
         return $this->redirectToRoute('app_conversation_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/{id}/messages', name: 'app_conversation_messages', methods: ['GET'])]
+    public function conversationMessages(Conversation $conversation): Response
+    {
+        return $this->render('conversation/messages.html.twig', [
+            'conversation' => $conversation,
+            'messages' => $conversation->getMessages(),
+            'chat_active' => true,
+        ]);
     }
 }

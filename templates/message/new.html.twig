@@ -1,11 +1,23 @@
-{% extends 'base.html.twig' %}
+{% extends 'base1.html.twig' %}
 
-{% block title %}New Message{% endblock %}
+{% block title %}Create new Message{% endblock %}
 
 {% block body %}
-    <h1>Create new Message</h1>
+    <h1 class="text-center my-4">Create new Message</h1>
 
-    {{ include('message/_form.html.twig') }}
+    <div class="d-flex justify-content-center">
+        <div style="width: 50%; max-width: 600px;">
+            {{ form_start(form) }}
+                {{ form_row(form.content) }}
+                {{ form_row(form.conversation) }}
 
-    <a href="{{ path('app_message_index') }}">back to list</a>
+               
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+     <button class="btn btn-success">{{ button_label|default('Save') }}</button>
+        <a href="{{ path('app_message_index') }}" class="btn btn-secondary">Back to list</a>
+    </div>
 {% endblock %}

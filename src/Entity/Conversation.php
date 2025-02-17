@@ -3,7 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ConversationRepository;
-use Doctrine\DBAL\Types\Types;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -20,20 +21,21 @@ class Conversation
     #[Assert\Positive(message: "Product ID should be a positive integer.")]
     private ?int $product_id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: "date")]
     #[Assert\NotNull(message: "Start date should not be null.")]
-
     private ?\DateTimeInterface $date_start = null;
 
     #[ORM\Column]
-    #[Assert\NotNull(message: "Message ID should not be null.")]
-    #[Assert\Positive(message: "Message ID should be a positive integer.")]
-    private ?int $message_id = null;
-
-    #[ORM\Column]
     #[Assert\NotNull(message: "Participant should not be null.")]
-    #[Assert\Positive(message: "Participant should be a positive integer.")]
-    private ?int $participant = null;
+    private ?string $participant = null;
+
+    #[ORM\OneToMany(mappedBy: "conversation", targetEntity: Message::class, cascade: ["persist", "remove"])]
+    private Collection $messages;
+
+    public function __construct()
+    {
+        $this->messages = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -64,26 +66,44 @@ class Conversation
         return $this;
     }
 
-    public function getMessageId(): ?int
-    {
-        return $this->message_id;
-    }
-
-    public function setMessageId(int $message_id): static
-    {
-        $this->message_id = $message_id;
-
-        return $this;
-    }
-
-    public function getParticipant(): ?int
+    public function getParticipant(): ?string
     {
         return $this->participant;
     }
 
-    public function setParticipant(int $participant): static
+    public function setParticipant(string $participant): static
     {
         $this->participant = $participant;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): static
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setConversation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): static
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getConversation() === $this) {
+                $message->setConversation(null);
+            }
+        }
 
         return $this;
     }

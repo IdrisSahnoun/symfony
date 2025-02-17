@@ -19,6 +19,7 @@ class MessageController extends AbstractController
     {
         return $this->render('message/index.html.twig', [
             'messages' => $messageRepository->findAll(),
+            'home_active' => true,
         ]);
     }
 
@@ -39,6 +40,7 @@ class MessageController extends AbstractController
         return $this->renderForm('message/new.html.twig', [
             'message' => $message,
             'form' => $form,
+            'home_active' => true,
         ]);
     }
 
@@ -47,6 +49,7 @@ class MessageController extends AbstractController
     {
         return $this->render('message/show.html.twig', [
             'message' => $message,
+            'home_active' => true,
         ]);
     }
 
@@ -65,6 +68,7 @@ class MessageController extends AbstractController
         return $this->renderForm('message/edit.html.twig', [
             'message' => $message,
             'form' => $form,
+            'home_active' => true,
         ]);
     }
 
@@ -77,5 +81,15 @@ class MessageController extends AbstractController
         }
 
         return $this->redirectToRoute('app_message_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/conversation/{id}', name: 'app_conversation_messages', methods: ['GET'])]
+    public function conversationMessages(Conversation $conversation): Response
+    {
+        return $this->render('message/conversation_messages.html.twig', [
+            'conversation' => $conversation,
+            'messages' => $conversation->getMessages(),
+            'home_active' => true,
+        ]);
     }
 }
